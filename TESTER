@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testers</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .loadingBar {
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            visibility: hidden;
+            font-size: 18px;
+        }
+
+        .loadingContainer {
+            width: 100%;
+            background-color: #ddd;
+            margin-top: 20px;
+        }
+
+        #resultado, #resultadoViado {
+            font-size: 24px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #clearMemoryBtn {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Baiano Tester</h1>
+    <button onclick="testarBaiano()">Testar</button>
+    <div class="loadingContainer">
+        <div class="loadingBar" id="loadingBarBaiano">Carregando...</div>
+    </div>
+    <p id="resultado"></p>
+
+    <h1>Viado Tester</h1>
+    <button onclick="testarViado()">Testar</button>
+    <div class="loadingContainer">
+        <div class="loadingBar" id="loadingBarViado">Carregando...</div>
+    </div>
+    <p id="resultadoViado"></p>
+
+    <button id="clearMemoryBtn" onclick="apagarMemoria()">Apagar Memória</button>
+
+    <script>
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function testarBaiano() {
+            var loadingBar = document.getElementById("loadingBarBaiano");
+            loadingBar.style.visibility = "visible";
+            loadingBar.style.width = "0%";
+            var width = 0;
+            var interval = setInterval(frame, 50);
+            
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    var resultado = getCookie("baianoTester");
+                    if (!resultado) {
+                        resultado = Math.floor(Math.random() * 51) + 50;
+                        setCookie("baianoTester", resultado, 365);
+                    }
+                    document.getElementById("resultado").innerText = "Você é " + resultado + "% baiano!";
+                    loadingBar.style.visibility = "hidden";
+                } else {
+                    width++;
+                    loadingBar.style.width = width + '%';
+                    loadingBar.innerText = width + '%';
+                }
+            }
+        }
+
+        function testarViado() {
+            var loadingBar = document.getElementById("loadingBarViado");
+            loadingBar.style.visibility = "visible";
+            loadingBar.style.width = "0%";
+            var width = 0;
+            var interval = setInterval(frame, 50);
+            
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    var resultado = getCookie("viadoTester");
+                    if (!resultado) {
+                        resultado = Math.floor(Math.random() * 51) + 50;
+                        setCookie("viadoTester", resultado, 365);
+                    }
+                    document.getElementById("resultadoViado").innerText = "Você é " + resultado + "% viado!";
+                    loadingBar.style.visibility = "hidden";
+                } else {
+                    width++;
+                    loadingBar.style.width = width + '%';
+                    loadingBar.innerText = width + '%';
+                }
+            }
+        }
+
+        function apagarMemoria() {
+            setCookie("baianoTester", "", -1);
+            setCookie("viadoTester", "", -1);
+            document.getElementById("resultado").innerText = "";
+            document.getElementById("resultadoViado").innerText = "";
+            alert("Memória apagada!");
+        }
+    </script>
+</body>
+</html>
